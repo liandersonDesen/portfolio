@@ -35,4 +35,5 @@ Portfólio pessoal desenvolvido em **HTML5, CSS3 e JavaScript puro (Vanilla JS)*
 
 1. Clone o repositório:
    ```bash
-   git clone [https://github.com/liandersonDesen/portfolio.git](https://github.com/liandersonDesen/portfolio.git)
+   git clone https://github.com/liandersonDesen/portfolio.git
+   ```
