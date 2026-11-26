@@ -179,6 +179,10 @@
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.2s ease;
@@ -854,7 +858,16 @@
         <button type="button" class="nav-btn" data-route="sobre-mim">Sobre Mim</button>
         <button type="button" class="nav-btn" data-route="projetos">Projetos</button>
         <button type="button" class="nav-btn" data-route="contatos">Contatos</button>
-        <button type="button" class="nav-download-btn" id="download-cv-btn">Baixar Currículo</button>
+        <a
+          id="download-cv-link"
+          href="https://github.com/liandersonDesen/portfolio/blob/main/Curriculo-Jose-Lianderson-2026.pdf"
+          download="Curriculo-Jose-Lianderson-2026.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="nav-download-btn"
+        >
+          Baixar Currículo
+        </a>
       </nav>
     </div>
   </header>
@@ -1238,6 +1251,8 @@
 
   <script>
     const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xwloyapg';
+    const CV_URL = 'https://github.com/liandersonDesen/portfolio/raw/refs/heads/main/meu%20curriculo%202026.pdf';
+    const CV_FILENAME = 'Curriculo-Jose-Lianderson-2026.pdf';
 
     const routeTriggers = document.querySelectorAll('[data-route]');
     const navButtons = document.querySelectorAll('nav .nav-btn');
@@ -1336,54 +1351,26 @@
       });
     });
 
-    // Download do currículo
-    const downloadCvBtn = document.getElementById('download-cv-btn');
-    downloadCvBtn.addEventListener('click', () => {
-      const curriculoTexto = [
-        'JOSÉ LIANDERSON',
-        'Desenvolvedor Full-Stack Júnior',
-        'Localização: Rua Nossa Senhora da Conceição, n.º 1471, São Raimundo, Amontada — Ceará',
-        'WhatsApp: +55 (88) 98888-2641',
-        'E-mail: liandersonr18@gmail.com',
-        'GitHub: https://github.com/liandersonDesen',
-        'LinkedIn: https://www.linkedin.com/in/jose-lianderson-ribeiro/',
-        '',
-        'PERFIL PESSOAL',
-        'Desenvolvedor Full-Stack com experiência no desenvolvimento de aplicações web, APIs e sistemas escaláveis. Atuação com Node.js, NestJS, React, Prisma, MongoDB e Mongoose, além de experiência com PostgreSQL. Participação em projetos colaborativos utilizando metodologias ágeis, com foco no desenvolvimento de soluções eficientes, escaláveis e inovadoras, atuando tanto no back-end quanto no front-end.',
-        '',
-        'HABILIDADES',
-        '- Desenvolvimento Full-Stack',
-        '- Engenharia de Software',
-        '- Arquitetura de APIs',
-        '- Deploy Contínuo',
-        '- Metodologias Ágeis',
-        '- Modelagem de Dados',
-        '',
-        'PROJETOS E EXPERIÊNCIA',
-        '- Copa Resultado (2026) — https://github.com/liandersonDesen/copa-resultado',
-        '- IBGE-Analytics (2026) — https://github.com/codevdu/IBGE-Analytics',
-        '- Projeto AMOTUR (2025) — https://amotur-k1qt.vercel.app/ | https://github.com/Amontada-Valley-Codes/AMOTUR-squad-03-server',
-        '- Plataforma de Inovação Corporativa NINAHUB (2025) — https://plataforma-inovacao-aberta.vercel.app/ | https://github.com/Amontada-Valley-Codes/Plataforma-de-Inova-o-Aberta-Corporativa-squard3-back-end',
-        '',
-        'HISTÓRICO ACADÊMICO',
-        '- Amontada Valley — Curso Full-stack (2026 —)',
-        '- Amontada Valley — Curso Back-end (2025)',
-        '- E.E.E.P. Luiz Gonzaga Fonseca Mota — Curso Técnico em Informática (2016 — 2018)',
-        '',
-        'CERTIFICADOS',
-        '- Certificado do Amontada Valley (2025)',
-        '- Certificado de Técnico em Informática'
-      ].join('\n');
+    const downloadCvLink = document.getElementById('download-cv-link');
+    downloadCvLink.addEventListener('click', async (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
 
-      const blob = new Blob([curriculoTexto], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'Curriculo-Jose-Lianderson.txt';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      try {
+        const res = await fetch(CV_URL);
+        if (!res.ok) throw new Error('Falha ao buscar o PDF');
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const tempLink = document.createElement('a');
+        tempLink.href = blobUrl;
+        tempLink.download = CV_FILENAME;
+        document.body.appendChild(tempLink);
+        tempLink.click();
+        document.body.removeChild(tempLink);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      } catch (_) {
+        window.open(CV_URL, '_blank', 'noopener,noreferrer');
+      }
     });
 
     const form = document.getElementById('contato-form');
