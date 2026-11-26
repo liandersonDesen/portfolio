@@ -862,8 +862,6 @@
           id="download-cv-link"
           href="./Curriculo-Jose-Lianderson-2026.pdf"
           download="Curriculo-Jose-Lianderson-2026.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
           class="nav-download-btn"
         >
           Baixar Currículo
@@ -1251,8 +1249,6 @@
 
   <script>
     const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xwloyapg';
-    const CV_URL = 'https://github.com/liandersonDesen/portfolio/raw/refs/heads/main/meu%20curriculo%202026.pdf';
-    const CV_FILENAME = 'Curriculo-Jose-Lianderson-2026.pdf';
 
     const routeTriggers = document.querySelectorAll('[data-route]');
     const navButtons = document.querySelectorAll('nav .nav-btn');
@@ -1349,28 +1345,6 @@
           card.style.display = match ? 'flex' : 'none';
         });
       });
-    });
-
-    const downloadCvLink = document.getElementById('download-cv-link');
-    downloadCvLink.addEventListener('click', async (e) => {
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-      e.preventDefault();
-
-      try {
-        const res = await fetch(CV_URL);
-        if (!res.ok) throw new Error('Falha ao buscar o PDF');
-        const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const tempLink = document.createElement('a');
-        tempLink.href = blobUrl;
-        tempLink.download = CV_FILENAME;
-        document.body.appendChild(tempLink);
-        tempLink.click();
-        document.body.removeChild(tempLink);
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
-      } catch (_) {
-        window.open(CV_URL, '_blank', 'noopener,noreferrer');
-      }
     });
 
     const form = document.getElementById('contato-form');
